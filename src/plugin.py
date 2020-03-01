@@ -397,6 +397,18 @@ class BNetPlugin(Plugin):
                 return int(match.group('h')) * 60 + int(match.group('m'))
         raise UnknownBackendResponse(f'Unknown Overwatch API playtime format: {qp_time}')
 
+    async def _get_ow_achievements(self):
+        achievements = await self.backend_client.get_ow_player_achievements()
+        galaxy_achievements = []
+        for achievement in achievements:
+            if achievement['unlocked'] == True:
+                galaxy_achievements.append(Achievement(achievement_id=achievement['api_key'], unlock_time=None))
+
+        numReceived = len(galaxy_achievements)
+        numTotal = len(achievements)
+        log.debug(f"User received {numReceived} of {numTotal} Overwatch achievements.")
+        return achievements
+
     async def _get_wow_achievements(self):
         achievements = []
         try:
@@ -461,7 +473,10 @@ class BNetPlugin(Plugin):
             f.write(json.dumps(sc2_achievement_data, cls=DataclassJSONEncoder))
         return sc2_achievement_data
 
-    # async def get_unlocked_achievements(self, game_id):
+    async def get_unlocked_achievements(self, game_id, context):
+        if game_id == "5272175":
+            return await self._get_ow_achievements()
+    #    else:
     #     if not self.website_client.is_authenticated():
     #         raise AuthenticationRequired()
     #     try:

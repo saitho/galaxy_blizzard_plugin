@@ -3,6 +3,8 @@ import requests
 import functools
 import logging
 
+from OverwatchAchievementExporter import Achievements as OWExporterAchievements
+
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 from http import HTTPStatus
@@ -155,6 +157,9 @@ class BackendClient(object):
     async def get_wow_character_achievements(self,  realm, character_name):
         url = f"{self._authentication_client.blizzard_api_url}/wow/character/{realm.lower()}/{character_name}?fields=achievements"
         return await self.do_request("GET", url)
+
+    async def get_ow_player_achievements(self):
+        return OWExporterAchievements().get_for_user(self._authentication_client.user_details['battletag'])
 
     async def get_ow_player_data(self):
         player_name = self._authentication_client.user_details['battletag']
