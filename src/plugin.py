@@ -32,6 +32,16 @@ from http_client import AuthenticatedHttpClient
 
 
 class BNetPlugin(Plugin):
+    async def get_game_time(self, game_id, context):
+        qpTimeMinutes = 0
+        log.info('game_id: ' + game_id)
+        if game_id == "5272175": # Overwatch
+            player_data = await self.backend_client.get_ow_player_data()
+            qpTime = re.search('0x0860000000000026.+?(?:(?P<h>\d+):)?(?P<m>\d+)', player_data.text)
+            qpTimeMinutes = int(qpTime.group('h')) * 60 + int(qpTime.group('m'))
+            log.info('Overwatch quickplay playtime [minutes]: ' + str(qpTimeMinutes))
+        return GameTime(game_id, qpTimeMinutes, None)
+
     def __init__(self, reader, writer, token):
         super().__init__(Platform.Battlenet, version, reader, writer, token)
         self.local_client = LocalClient(self._update_statuses)
