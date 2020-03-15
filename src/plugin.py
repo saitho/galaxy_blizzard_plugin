@@ -407,7 +407,7 @@ class BNetPlugin(Plugin):
         numReceived = len(galaxy_achievements)
         numTotal = len(achievements)
         log.debug(f"User received {numReceived} of {numTotal} Overwatch achievements.")
-        return achievements
+        return galaxy_achievements
 
     async def _get_wow_achievements(self):
         achievements = []

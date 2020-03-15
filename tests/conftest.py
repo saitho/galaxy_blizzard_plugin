@@ -116,6 +116,7 @@ async def backend_mock():
     mock.get_owned_games = AsyncMock()
     mock.get_owned_classic_games = AsyncMock()
     mock.get_ow_player_data = AsyncMock()
+    mock.get_ow_player_achievements = AsyncMock()
     return mock
 
 
