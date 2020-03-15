@@ -159,7 +159,7 @@ class BackendClient(object):
         return await self.do_request("GET", url)
 
     async def get_ow_player_achievements(self):
-        return OWExporterAchievements().get_for_user(self._authentication_client.user_details['battletag'])
+        return await OWExporterAchievements().get_for_user(self._authentication_client.user_details['battletag'])
 
     async def get_ow_player_data(self):
         player_name = self._authentication_client.user_details['battletag']
